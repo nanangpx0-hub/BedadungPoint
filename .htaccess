@@ -1,0 +1,25 @@
+# BedadungPoint URL rewrite
+# Works both when app is in root domain (hosting) and subfolder (localhost/bedadung).
+
+Options -MultiViews
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1) Canonical URL: remove index.php from address bar
+    # Examples:
+    # /index.php            -> /
+    # /index.php?x=1        -> /?x=1
+    # /subdir/index.php?a=1 -> /subdir/?a=1
+    RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php(?:[?\s]|$) [NC]
+    RewriteRule ^ /%1 [R=301,L,NE]
+
+    # 2) Serve existing files/directories directly
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # 3) Front-controller fallback (clean URLs)
+    RewriteRule ^ index.php [L]
+</IfModule>
