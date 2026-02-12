@@ -6,6 +6,7 @@ send_security_headers();
 ?>
 <!doctype html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -386,6 +387,36 @@ send_security_headers();
             border-radius: 3px;
         }
 
+        .feedback-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+            color: #f8fce9;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .feedback-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(212, 175, 55, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-icon {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
         @media (max-width: 480px) {
             .footer-inner {
                 padding: 12px 0 16px;
@@ -393,125 +424,129 @@ send_security_headers();
         }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <header>
-        <p class="header-identity">BPS Kabupaten Jember</p>
-        <h1>BedadungPoint - Presisi di Bumi Pandalungan</h1>
-        <p>Konversi dua arah koordinat Decimal ↔ DMS dengan informasi alamat lokasi.</p>
-    </header>
+    <div class="container">
+        <header>
+            <p class="header-identity">BPS Kabupaten Jember</p>
+            <h1>BedadungPoint - Presisi di Bumi Pandalungan</h1>
+            <p>Konversi dua arah koordinat Decimal ↔ DMS dengan informasi alamat lokasi.</p>
+        </header>
 
-    <section class="panel" aria-label="Konverter koordinat decimal dan DMS">
-        <h2>Konversi Koordinat Decimal ↔ DMS</h2>
-        <p class="muted">Gunakan peta atau input teks untuk mengonversi koordinat secara dua arah.</p>
+        <section class="panel" aria-label="Konverter koordinat decimal dan DMS">
+            <h2>Konversi Koordinat Decimal ↔ DMS</h2>
+            <p class="muted">Gunakan peta atau input teks untuk mengonversi koordinat secara dua arah.</p>
 
-        <?php if (MAPS_API_KEY === ''): ?>
-            <div class="alert alert-warning">
-                MAPS_API_KEY belum diset. Konversi tetap berjalan, tetapi fitur peta dan pencarian alamat tidak aktif.
-            </div>
-        <?php endif; ?>
+            <?php if (MAPS_API_KEY === ''): ?>
+                <div class="alert alert-warning">
+                    MAPS_API_KEY belum diset. Konversi tetap berjalan, tetapi fitur peta dan pencarian alamat tidak aktif.
+                </div>
+            <?php endif; ?>
 
-        <div class="map-wrapper">
-            <div class="map-toolbar">
-                <label for="map-view-select">Tampilan Peta:</label>
-                <select id="map-view-select" aria-label="Pilih tampilan peta">
-                    <option value="roadmap">Roadmap</option>
-                    <option value="satellite">Satellite</option>
-                    <option value="hybrid" selected>Hybrid</option>
-                    <option value="terrain">Terrain</option>
-                </select>
-                <span class="map-hint">Street View aktif melalui kontrol Pegman di peta.</span>
-            </div>
+            <div class="map-wrapper">
+                <div class="map-toolbar">
+                    <label for="map-view-select">Tampilan Peta:</label>
+                    <select id="map-view-select" aria-label="Pilih tampilan peta">
+                        <option value="roadmap">Roadmap</option>
+                        <option value="satellite">Satellite</option>
+                        <option value="hybrid" selected>Hybrid</option>
+                        <option value="terrain">Terrain</option>
+                    </select>
+                    <span class="map-hint">Street View aktif melalui kontrol Pegman di peta.</span>
+                </div>
 
-            <div id="map-canvas" class="map-canvas" aria-label="Peta interaktif lokasi"></div>
+                <div id="map-canvas" class="map-canvas" aria-label="Peta interaktif lokasi"></div>
 
-            <div class="map-legend" aria-live="polite">
-                <p class="map-legend-title">Legenda Koordinat (Real-Time)</p>
-                <div class="map-legend-grid">
-                    <span>Latitude</span>
-                    <span id="legend-lat">-</span>
-                    <span>Longitude</span>
-                    <span id="legend-lng">-</span>
-                    <span>Zoom</span>
-                    <span id="legend-zoom">-</span>
-                    <span>Status</span>
-                    <span id="legend-status">Peta siap digunakan.</span>
+                <div class="map-legend" aria-live="polite">
+                    <p class="map-legend-title">Legenda Koordinat (Real-Time)</p>
+                    <div class="map-legend-grid">
+                        <span>Latitude</span>
+                        <span id="legend-lat">-</span>
+                        <span>Longitude</span>
+                        <span id="legend-lng">-</span>
+                        <span>Zoom</span>
+                        <span id="legend-zoom">-</span>
+                        <span>Status</span>
+                        <span id="legend-status">Peta siap digunakan.</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="converter-grid">
-            <div class="converter-box">
-                <label for="decimal-source">Sumber Decimal (lat, lng)</label>
-                <input
-                    id="decimal-source"
-                    type="text"
-                    placeholder="-8.1050786039, 113.7262102605"
-                    autocomplete="off"
-                >
+            <div class="converter-grid">
+                <div class="converter-box">
+                    <label for="decimal-source">Sumber Decimal (lat, lng)</label>
+                    <input id="decimal-source" type="text" placeholder="-8.1050786039, 113.7262102605"
+                        autocomplete="off">
+                    <div class="converter-actions">
+                        <button type="button" id="convert-decimal-to-dms" class="btn">
+                            Decimal → DMS
+                        </button>
+                    </div>
+                </div>
+
+                <div class="converter-box">
+                    <label for="dms-source">Sumber DMS (lat + lng)</label>
+                    <input id="dms-source" type="text" placeholder="8°06'18.3&quot;S 113°43'34.4&quot;E"
+                        autocomplete="off">
+                    <div class="converter-actions">
+                        <button type="button" id="convert-dms-to-decimal" class="btn">
+                            DMS → Decimal
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="converter-status" class="alert alert-warning hidden" role="status" aria-live="polite"></div>
+
+            <div id="converter-result" class="converter-result hidden">
+                <pre id="converter-result-text"></pre>
                 <div class="converter-actions">
-                    <button type="button" id="convert-decimal-to-dms" class="btn">
-                        Decimal → DMS
-                    </button>
+                    <button type="button" id="copy-result-btn" class="btn">Copy Hasil</button>
+                    <span id="copy-feedback" class="copy-feedback"></span>
                 </div>
             </div>
-
-            <div class="converter-box">
-                <label for="dms-source">Sumber DMS (lat + lng)</label>
-                <input
-                    id="dms-source"
-                    type="text"
-                    placeholder="8°06'18.3&quot;S 113°43'34.4&quot;E"
-                    autocomplete="off"
-                >
-                <div class="converter-actions">
-                    <button type="button" id="convert-dms-to-decimal" class="btn">
-                        DMS → Decimal
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="converter-status" class="alert alert-warning hidden" role="status" aria-live="polite"></div>
-
-        <div id="converter-result" class="converter-result hidden">
-            <pre id="converter-result-text"></pre>
-            <div class="converter-actions">
-                <button type="button" id="copy-result-btn" class="btn">Copy Hasil</button>
-                <span id="copy-feedback" class="copy-feedback"></span>
-            </div>
-        </div>
-    </section>
-</div>
-
-<footer class="site-footer" aria-label="Informasi aplikasi">
-    <div class="footer-inner">
-        <p class="footer-line">Developer Nanang Pamungkas</p>
-        <p class="footer-muted">Version 1.0.0</p>
-        <p class="footer-muted footer-love">
-            Created with
-            <span class="love-icon" role="img" aria-label="love">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"></path>
-                </svg>
-            </span>
-        </p>
+        </section>
     </div>
-</footer>
 
-<script>
-    window.BedadungPointConfig = {
-        hasMapsApiKey: <?php echo MAPS_API_KEY !== '' ? 'true' : 'false'; ?>,
-        defaultCenter: { lat: -8.1704, lng: 113.7022 }
-    };
-</script>
-<script src="script.js"></script>
-<?php if (MAPS_API_KEY !== ''): ?>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=<?php echo urlencode(MAPS_API_KEY); ?>&callback=initBedadungMap&language=id&region=ID"
-        async
-        defer
-    ></script>
-<?php endif; ?>
+    <footer class="site-footer" aria-label="Informasi aplikasi">
+        <div class="footer-inner">
+            <p class="footer-line">Developer Nanang Pamungkas</p>
+            <p class="footer-muted">Version 1.0.0</p>
+            <div>
+                <a href="mailto:nanang.pamungkas@bps.go.id?subject=Masukan%20untuk%20Aplikasi%20BedadungPoint" 
+                   class="feedback-link" 
+                   title="Kirim masukan atau saran langsung ke tim pengembang untuk perbaikan aplikasi">
+                    <svg class="feedback-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    Beri Masukan
+                </a>
+            </div>
+            <p class="footer-muted footer-love">
+                Created with
+                <span class="love-icon" role="img" aria-label="love">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z">
+                        </path>
+                    </svg>
+                </span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        window.BedadungPointConfig = {
+            hasMapsApiKey: <?php echo MAPS_API_KEY !== '' ? 'true' : 'false'; ?>,
+            defaultCenter: { lat: -8.1704, lng: 113.7022 }
+        };
+    </script>
+    <script src="script.js"></script>
+    <?php if (MAPS_API_KEY !== ''): ?>
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=<?php echo urlencode(MAPS_API_KEY); ?>&callback=initBedadungMap&language=id&region=ID"
+            async defer></script>
+    <?php endif; ?>
 </body>
+
 </html>
