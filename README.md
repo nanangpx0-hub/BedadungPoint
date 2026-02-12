@@ -1,78 +1,53 @@
 # BedadungPoint
 
-Aplikasi web untuk konversi koordinat dua arah antara format Decimal dan DMS (Derajat-Menit-Detik), dilengkapi informasi alamat otomatis dari hasil koordinat.
+Dokumentasi teknis resmi untuk aplikasi **BedadungPoint**.  
+Identitas institusi: **BPS Kabupaten Jember**.
 
-Tagline: **"BedadungPoint - Presisi di Bumi Pandalungan"**
+## Daftar Isi
+1. [Pengenalan Proyek](docs/01-pengenalan-proyek.md)
+2. [Panduan Instalasi](docs/02-instalasi.md)
+3. [Arsitektur Sistem](docs/03-arsitektur-sistem.md)
+4. [Dokumentasi API](docs/04-dokumentasi-api.md)
+5. [Panduan Penggunaan Fitur](docs/05-panduan-penggunaan.md)
+6. [Konfigurasi dan Environment Variables](docs/06-konfigurasi-env.md)
+7. [Troubleshooting](docs/07-troubleshooting.md)
+8. [Kontribusi dan Standar Pengembangan](docs/08-kontribusi-standar.md)
+9. [Changelog dan Rilis](docs/09-changelog-rilis.md)
+10. [Lisensi dan Informasi Legal](docs/10-lisensi-legal.md)
 
-## Fitur Utama
-- Peta interaktif di bagian atas konverter (Google Maps).
-- Klik pada peta untuk memilih titik koordinat secara visual.
-- Marker draggable (drag-and-drop) untuk mengubah koordinat.
-- Zoom control, pilihan mode peta (`Roadmap`, `Satellite`, `Hybrid`, `Terrain`), dan Street View.
-- Legenda koordinat real-time (lat, lng, zoom, status) saat marker dipindah/klik peta.
-- Konversi `Decimal -> DMS` dengan penunjuk arah `N/S/E/W`.
-- Konversi `DMS -> Decimal`.
-- Validasi format input dan rentang koordinat (lat/lng).
-- Hasil konversi ditampilkan jelas dalam blok teks.
-- Informasi alamat otomatis di bawah hasil konversi (reverse geocoding Google Maps).
-- Tombol `Copy Hasil` ke clipboard.
+## Ringkasan Proyek
+BedadungPoint adalah aplikasi web berbasis PHP untuk:
+- Konversi koordinat dua arah: **Decimal <-> DMS**
+- Visualisasi titik pada **Google Maps interaktif**
+- Reverse geocoding (alamat otomatis dari koordinat)
+- Pengelolaan data titik koordinat melalui endpoint backend (`simpan.php`, `hapus.php`)
 
-## Struktur File
-- `index.php`: UI utama konverter.
-- `script.js`: logika konversi, validasi, copy, dan pencarian alamat.
-- `database.php`: konfigurasi environment + `MAPS_API_KEY`.
-- `tests/manual_test_checklist.md`: checklist uji manual terbaru.
-
-Catatan:
-- File lama `simpan.php`, `hapus.php`, `points.sql`, dan `tests/functional_db_test.php` masih tersedia sebagai modul legacy database.
-
-## Prasyarat
-- PHP 7.4+ (disarankan PHP 8.x).
-- Web server (Apache/Nginx/Laragon/XAMPP).
-- Google Maps JavaScript API key aktif (untuk fitur alamat).
-
-## Setup Lokal (Localhost)
-1. Pastikan project berada di `C:\laragon\www\bedadung`.
-2. Set API key:
-   - via environment variable:
-     ```powershell
-     setx MAPS_API_KEY "API_KEY_ANDA"
-     ```
-   - atau isi fallback di `database.php`:
-     - `MAPS_API_KEY_LOCAL`
-3. Restart Apache/Laragon.
-4. Akses:
-   - `http://localhost/bedadung/index.php`
-
-## Format Input
-
-### Decimal
-- Format: `lat, lng`
-- Contoh: `-8.1050786039, 113.7262102605`
-- Wajib desimal bertitik (`.`), bukan koma desimal.
-
-### DMS
-- Format: `DD°MM'SS.S"[N|S] DDD°MM'SS.S"[E|W]`
-- Contoh: `8°06'18.3"S 113°43'34.4"E`
-
-## Contoh Hasil
+## Struktur Dokumentasi
 ```text
-Mode: Decimal → DMS
-Input Decimal: -8.1050786039, 113.7262102605
-Hasil DMS: 8°06'18.3"S 113°43'34.4"E
-Alamat: VPVG+R85 Arjasa, Kabupaten Jember, Jawa Timur
+docs/
+  01-pengenalan-proyek.md
+  02-instalasi.md
+  03-arsitektur-sistem.md
+  04-dokumentasi-api.md
+  05-panduan-penggunaan.md
+  06-konfigurasi-env.md
+  07-troubleshooting.md
+  08-kontribusi-standar.md
+  09-changelog-rilis.md
+  10-lisensi-legal.md
+  assets/
+    screenshots/
+      map-overview.svg
+      convert-decimal-dms.svg
+      convert-dms-decimal.svg
+      result-with-address.svg
 ```
 
-## Troubleshooting
-- Peta tidak muncul:
-  - cek `MAPS_API_KEY` valid
-  - pastikan `Maps JavaScript API` aktif
-  - pastikan billing Google Cloud aktif
-  - cek pembatasan referrer mengizinkan `localhost`
-- Alamat tidak muncul:
-  - cek `MAPS_API_KEY` valid
-  - pastikan `Maps JavaScript API` aktif
-  - pastikan billing Google Cloud aktif
-  - cek pembatasan referrer mengizinkan `localhost`
-- Jika hanya konversi yang muncul tanpa alamat:
-  - artinya konversi berjalan, tetapi reverse geocoding belum aktif.
+## Quick Start
+1. Ikuti langkah setup di [Panduan Instalasi](docs/02-instalasi.md).
+2. Set `MAPS_API_KEY` (atau `MAPS_API_KEY_LOCAL`) sesuai [Konfigurasi ENV](docs/06-konfigurasi-env.md).
+3. Buka `http://localhost/bedadung/`.
+
+## Catatan
+- Dokumen ini ditulis dalam Bahasa Indonesia dan dipecah menjadi modul agar mudah dipelihara.
+- Diagram menggunakan format **Mermaid** (didukung oleh GitHub dan banyak viewer Markdown modern).
