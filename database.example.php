@@ -70,24 +70,29 @@ if (!defined('DB_PORT')) {
 
 if (is_local_environment()) {
     if (!defined('DB_NAME')) {
-        define('DB_NAME', 'db_bedadung');
+        $localDbName = get_env_value('BEDADUNG_DB_NAME');
+        define('DB_NAME', $localDbName !== '' ? $localDbName : 'db_bedadung');
     }
     if (!defined('DB_USER')) {
-        define('DB_USER', 'root');
+        $localDbUser = get_env_value('BEDADUNG_DB_USER');
+        define('DB_USER', $localDbUser !== '' ? $localDbUser : 'root');
     }
     if (!defined('DB_PASS')) {
-        define('DB_PASS', '');
+        $localDbPass = get_env_value('BEDADUNG_DB_PASS');
+        define('DB_PASS', $localDbPass !== '' ? $localDbPass : '');
     }
 } else {
     if (!defined('DB_NAME')) {
-        define('DB_NAME', 'bpsjembe_bedadung');
+        $prodDbName = get_env_value('BEDADUNG_DB_NAME');
+        define('DB_NAME', $prodDbName !== '' ? $prodDbName : 'bedadung');
     }
     if (!defined('DB_USER')) {
-        define('DB_USER', 'bpsjembe_admin');
+        $prodDbUser = get_env_value('BEDADUNG_DB_USER');
+        define('DB_USER', $prodDbUser !== '' ? $prodDbUser : 'bedadung_user');
     }
     if (!defined('DB_PASS')) {
         $prodPassword = get_env_value('BEDADUNG_DB_PASS');
-        define('DB_PASS', $prodPassword !== '' ? $prodPassword : 'YOUR_PROD_PASSWORD_HERE');
+        define('DB_PASS', $prodPassword !== '' ? $prodPassword : '');
     }
 }
 

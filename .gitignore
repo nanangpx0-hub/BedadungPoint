@@ -1,14 +1,26 @@
-
+# Secrets and local-only configuration
 database.php
-/vendor
-
-/node_modules
-/.idea
-/.vscode
 .env
+.env.*
+!.env.example
+config.json
+config/*.local.php
+database.local.php
+*.secret
+*.secrets.*
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Editor/OS noise
+/.idea/
+/.vscode/
 .DS_Store
 Thumbs.db
 *.log
 *.tmp
 *.bak
-/tests/temp
+
+# Temporary files
+/tests/temp/

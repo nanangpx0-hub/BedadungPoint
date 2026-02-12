@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Map Overview">
+  <rect width="1280" height="720" fill="#f2f8f2"/>
+  <rect x="40" y="40" width="1200" height="90" rx="14" fill="#1b5e20"/>
+  <text x="70" y="95" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">BedadungPoint - Map Overview</text>
+  <rect x="40" y="160" width="1200" height="480" rx="12" fill="#dff0df" stroke="#d4af37" stroke-width="3"/>
+  <text x="70" y="220" fill="#1b5e20" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="600">Placeholder Screenshot</text>
+  <text x="70" y="270" fill="#305230" font-family="Segoe UI, Arial, sans-serif" font-size="24">Ganti file ini dengan screenshot aktual halaman utama.</text>
+</svg>

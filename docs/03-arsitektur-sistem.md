@@ -1,50 +1,59 @@
 # 3. Arsitektur Sistem
 
-## 3.1 Gambaran Umum
-BedadungPoint menggunakan arsitektur web sederhana:
-- **Presentation Layer**: `index.php`, `script.js`, CSS inline
-- **Application Layer**: logika konversi, validasi input, interaksi peta
-- **Integration Layer**: Google Maps JS API + Geocoder
-- **Data Layer (legacy)**: MySQL tabel `points`
+## 3.1 Arsitektur Tingkat Tinggi
+Aplikasi menggunakan pola server-rendered PHP dengan JavaScript client-side.
 
-## 3.2 Flowchart Alur Utama
 ```mermaid
-flowchart TD
-    A[User membuka aplikasi] --> B[Render index.php]
-    B --> C{MAPS_API_KEY tersedia?}
-    C -- Ya --> D[Inisialisasi Google Maps]
-    C -- Tidak --> E[Tampilkan warning API key]
-    D --> F[User input Decimal/DMS atau klik peta]
-    F --> G[Validasi input]
-    G -- Valid --> H[Konversi koordinat]
-    H --> I[Update marker dan legenda real-time]
-    I --> J[Reverse geocoding]
-    J --> K[Tampilkan hasil + alamat]
-    G -- Tidak valid --> L[Tampilkan error]
+flowchart LR
+    U[User Browser] --> W[Apache + PHP]
+    W --> V[index.php]
+    V --> J[script.js]
+    J --> G[Google Maps JS API]
+    J --> R[reverse_geocode.php]
+    R --> N[Nominatim API]
+    W --> D[(MySQL/MariaDB)]
+    D <-->|legacy endpoint| S[simpan.php / hapus.php]
 ```
 
-## 3.3 Flowchart Endpoint Legacy Data
+## 3.2 Alur Konversi dan Alamat
 ```mermaid
 flowchart TD
-    A[POST simpan.php] --> B{CSRF valid?}
-    B -- Tidak --> C[Redirect index + flash error]
-    B -- Ya --> D[Validasi nama/lat/lng]
-    D -- Valid --> E[INSERT points]
-    D -- Tidak valid --> C
-    E --> F[Redirect index + flash sukses]
-
-    G[POST hapus.php] --> H{CSRF valid?}
-    H -- Tidak --> I[Redirect index + flash error]
-    H -- Ya --> J[Validasi id]
-    J --> K[DELETE FROM points]
-    K --> L[Redirect index + flash status]
+    A[Input Decimal atau DMS] --> B[Validasi Format]
+    B -->|valid| C[Konversi Koordinat]
+    C --> D[Perbarui Marker dan Legenda Peta]
+    D --> E[Ambil Alamat]
+    E --> E1[Google Geocoder / Places]
+    E --> E2[Fallback reverse_geocode.php]
+    E2 --> E3[Nominatim]
+    E1 --> F[Tampilkan Hasil]
+    E3 --> F[Tampilkan Hasil]
+    B -->|tidak valid| X[Tampilkan Pesan Error]
 ```
 
-## 3.4 ER Diagram (Legacy Database)
+## 3.3 Komponen Utama
+- `index.php`
+  - Render UI dan injeksi konfigurasi JavaScript.
+  - Menampilkan area peta, input konversi, dan hasil.
+- `script.js`
+  - Parser/validator input.
+  - Konversi Decimal <-> DMS.
+  - Inisialisasi peta, marker drag-and-drop, klik peta.
+  - Integrasi reverse geocoding.
+- `database.php`
+  - Deteksi mode lingkungan (`LOCALHOST`/`HOSTING`).
+  - Konfigurasi DB/API dari environment variable.
+  - Helper CSRF dan security headers.
+- `reverse_geocode.php`
+  - Endpoint fallback alamat server-side.
+  - Validasi input `lat/lng` dan response JSON.
+- `simpan.php`, `hapus.php` (legacy)
+  - Endpoint mutasi data titik yang dilindungi CSRF.
+
+## 3.4 ER Diagram
 ```mermaid
 erDiagram
     POINTS {
-        BIGINT UNSIGNED id PK
+        BIGINT_UNSIGNED id PK
         VARCHAR nama
         DECIMAL lat
         DECIMAL lng
@@ -52,31 +61,8 @@ erDiagram
     }
 ```
 
-## 3.5 Komponen Utama
-### `index.php`
-- Menyusun layout UI.
-- Menyuntikkan konfigurasi global JS (`hasMapsApiKey`, `defaultCenter`).
-- Menampilkan header/footer dan area map + konversi.
-
-### `script.js`
-- Parser/validator Decimal dan DMS.
-- Konversi dua arah Decimal <-> DMS.
-- Inisialisasi peta, marker drag-and-drop, click-to-set-point.
-- Update legenda koordinat real-time.
-- Reverse geocoding alamat.
-- Copy hasil ke clipboard.
-
-### `database.php`
-- Deteksi environment lokal vs production.
-- Koneksi PDO untuk endpoint legacy.
-- CSRF helper dan security headers.
-- Definisi konstanta `MAPS_API_KEY`.
-
-### `simpan.php` & `hapus.php` (Legacy)
-- Endpoint mutasi data titik.
-- POST-only + CSRF + prepared statements.
-
-### `.htaccess`
-- URL canonical tanpa `index.php`.
-- Front-controller fallback.
-- Mendukung base URL root maupun subfolder.
+## 3.5 Keamanan Arsitektur
+- CSRF token untuk endpoint POST.
+- Validasi input di frontend dan backend.
+- Prepared statement PDO (anti SQL injection).
+- Security headers (`X-Frame-Options`, `X-Content-Type-Options`, dll).
