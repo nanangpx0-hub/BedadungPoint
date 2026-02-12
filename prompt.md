@@ -5,7 +5,7 @@ Role: Full-Stack Web Developer. Task: Buat aplikasi web "BedadungPoint" untuk ko
 
 Jika localhost, gunakan DB: db_bedadung, User: root, Pass: ``.
 
-Jika hosting, gunakan DB: bpsjembe_bedadung, User: bpsjembe_admin, Pass: (sesuaikan).
+Jika hosting, gunakan DB: your_db_name, User: your_db_user, Pass: (set via environment variable).
 
 Definisikan konstanta MAPS_API_KEY di dalam file ini.
 

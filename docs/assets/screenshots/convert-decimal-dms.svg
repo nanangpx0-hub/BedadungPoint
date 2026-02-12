@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Convert Decimal to DMS">
+  <rect width="1280" height="720" fill="#f2f8f2"/>
+  <rect x="40" y="40" width="1200" height="640" rx="14" fill="#ffffff" stroke="#cddfcd"/>
+  <text x="70" y="95" fill="#1b5e20" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Konversi Decimal - DMS</text>
+  <text x="70" y="160" fill="#274727" font-family="Segoe UI, Arial, sans-serif" font-size="24">Input Decimal: -8.1050786039, 113.7262102605</text>
+  <text x="70" y="210" fill="#274727" font-family="Segoe UI, Arial, sans-serif" font-size="24">Hasil DMS: 8°06'18.3"S 113°43'34.4"E</text>
+  <text x="70" y="260" fill="#274727" font-family="Segoe UI, Arial, sans-serif" font-size="24">Alamat: VPVG+R85 Arjasa, Kabupaten Jember, Jawa Timur</text>
+  <text x="70" y="330" fill="#7b8f7b" font-family="Segoe UI, Arial, sans-serif" font-size="20">Placeholder screenshot. Ganti dengan tangkapan layar aktual.</text>
+</svg>
