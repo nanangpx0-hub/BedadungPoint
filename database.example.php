@@ -55,7 +55,7 @@ function get_env_value(string $key): string
 
 if (!defined('MAPS_API_KEY_LOCAL')) {
     // Fallback manual untuk localhost jika env MAPS_API_KEY tidak terbaca oleh web server.
-    define('MAPS_API_KEY_LOCAL', 'AIzaSyA9hl838wg2X7AjUuZEgpY5Wd8Xlb3uyFk');
+    define('MAPS_API_KEY_LOCAL', 'YOUR_LOCAL_API_KEY_HERE');
 }
 
 if (!defined('DB_HOST')) {
@@ -87,7 +87,7 @@ if (is_local_environment()) {
     }
     if (!defined('DB_PASS')) {
         $prodPassword = get_env_value('BEDADUNG_DB_PASS');
-        define('DB_PASS', $prodPassword !== '' ? $prodPassword : 'ganti_dengan_password_hosting');
+        define('DB_PASS', $prodPassword !== '' ? $prodPassword : 'YOUR_PROD_PASSWORD_HERE');
     }
 }
 

@@ -1,5 +1,7 @@
 
+database.php
 /vendor
+
 /node_modules
 /.idea
 /.vscode
